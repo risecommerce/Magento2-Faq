@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+    	<add id="Magento_Backend::faq_settings" title="FAQ" module="Risecommerce_Faq" sortOrder="60"  resource="Magento_Backend::faq_settings" />
+    	<add id="Magento_Backend::faq_manage" title="FAQ Management" module="Risecommerce_Faq" sortOrder="60" parent="Magento_Backend::faq_settings"  resource="Magento_Backend::faq_manage" />
+        <add id="Risecommerce_Faq::risecommerce_faq_category" title="Manage FAQ Category" module="Risecommerce_Faq" sortOrder="0" parent="Magento_Backend::faq_manage" action="faq/faqcategorybackend" resource="Risecommerce_Faq::risecommerce_faq_category"/>
+        <add id="Risecommerce_Faq::risecommerce_faq" title="Manage FAQ" module="Risecommerce_Faq" sortOrder="1" parent="Magento_Backend::faq_manage" action="faq/faqbackend" resource="Risecommerce_Faq::risecommerce_faq"/>
+    </menu>
+</config>
