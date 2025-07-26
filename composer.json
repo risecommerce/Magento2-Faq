@@ -1,8 +1,8 @@
 {
-    "name": "risecommerce/magento-2-faq-extension",
-    "description": "Risecommerce FAQ Extension for Magento 2",
+    "name": "risecommerce/magento-2-faq-extension-hyva",
+    "description": "Risecommerce FAQ Extension for Magento 2 - Hyva Compatible",
     "type": "magento2-module",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -21,10 +21,17 @@
         "magento2 faq",
         "magento faq",
         "faq",
-        "risecommerce"
+        "risecommerce",
+        "hyva",
+        "hyva compatible",
+        "hyva theme"
       ],
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0|~7.3.0|~7.4.0|^8.0"
+        "php": "~7.0.13|~7.1.0|~7.2.0|~7.3.0|~7.4.0|^8.0",
+        "hyva-themes/magento2-compat-module-fallback": "*"
+    },
+    "suggest": {
+        "hyva-themes/magento2-default-theme": "Hyva default theme for optimal compatibility"
     },
     "autoload": {
         "files": [ 

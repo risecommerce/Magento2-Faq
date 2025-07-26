@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FAQ Specific Styles */
+@layer components {
+    .faq-accordion {
+        @apply space-y-4;
+    }
+    
+    .faq-item {
+        @apply border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200;
+    }
+    
+    .faq-question {
+        @apply w-full px-6 py-4 text-left bg-white hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition-colors duration-200 flex justify-between items-center;
+    }
+    
+    .faq-question:focus {
+        @apply ring-2 ring-blue-500 ring-opacity-50;
+    }
+    
+    .faq-answer {
+        @apply overflow-hidden transition-all duration-300 ease-in-out;
+    }
+    
+    .faq-answer-content {
+        @apply px-6 py-4 bg-gray-50 border-t border-gray-200;
+    }
+    
+    .faq-categories {
+        @apply bg-gray-50 p-4 rounded-lg;
+    }
+    
+    .faq-category-button {
+        @apply w-full text-left px-4 py-2 rounded-md transition-colors duration-200;
+    }
+    
+    .faq-category-button.active {
+        @apply bg-blue-500 text-white;
+    }
+    
+    .faq-category-button:not(.active) {
+        @apply bg-white text-gray-700 hover:bg-gray-100;
+    }
+    
+    .faq-no-results {
+        @apply text-center py-12;
+    }
+    
+    .faq-icon {
+        @apply w-5 h-5 text-gray-500 transform transition-transform duration-200;
+    }
+    
+    .faq-icon.open {
+        @apply rotate-180;
+    }
+}
+
+/* Custom animations for FAQ */
+@layer utilities {
+    .animate-accordion-down {
+        animation: accordion-down 0.2s ease-out;
+    }
+    
+    .animate-accordion-up {
+        animation: accordion-up 0.2s ease-out;
+    }
+}
+
+@keyframes accordion-down {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--radix-accordion-content-height);
+    }
+}
+
+@keyframes accordion-up {
+    from {
+        height: var(--radix-accordion-content-height);
+    }
+    to {
+        height: 0;
+    }
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+    .faq-categories {
+        @apply mb-6;
+    }
+    
+    .faq-question {
+        @apply px-4 py-3 text-sm;
+    }
+    
+    .faq-answer-content {
+        @apply px-4 py-3;
+    }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+    .faq-item {
+        @apply border-gray-700 bg-gray-800;
+    }
+    
+    .faq-question {
+        @apply bg-gray-800 text-white hover:bg-gray-700;
+    }
+    
+    .faq-answer-content {
+        @apply bg-gray-700 border-gray-600 text-gray-200;
+    }
+    
+    .faq-categories {
+        @apply bg-gray-800;
+    }
+    
+    .faq-category-button:not(.active) {
+        @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
+    }
+}
+

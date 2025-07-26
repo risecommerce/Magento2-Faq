@@ -15,77 +15,91 @@ if ($block->isFaqEnabled() == 1) :
     $categoryNavbarEnable = $block->isCategoryNavbarEnable();
 
     ?>
-    <div class="content-heading">
-        <h2 class="title"><?= $block->escapeHtml(__($block->getFaqListLabelText())) ?></h2>
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4"><?= $block->escapeHtml(__($block->getFaqListLabelText())) ?></h2>
     </div>
+    
     <?php foreach ($items as $item) : ?>
         <input type="hidden" id="<?= $block->escapeHtmlAttr($item->getFaqCategoryId()) ?>" class="categoryvalue">
     <?php endforeach; ?>
+    
     <?php
     if ($categoryNavbarEnable) {
-
         if ($itemCount > 1) {
             ?>
-            <div class="risecommerce-block-content <?= ($pageLayout == "1column")?'column1layout':''; ?>">
-                <div class="risecommerce-block-subtitle">
-                    <strong role="heading" aria-level="2"><?= $block->escapeHtml(__("CATEGORIES")); ?></strong>
-                </div>
-                <?php
-                foreach ($items as $item) :
-                    if ($faqCatId == $item->getFaqCategoryId()) {
-                        $isActive = 'active';
-                    } else {
-                        $isActive = '';
-                    }
-                    ?>
-                    <div class="risecommerce-block-item <?= $block->escapeHtmlAttr($isActive); ?>"
-                         id="<?= $block->escapeHtmlAttr($item->getFaqCategoryId()) ?>">
-                        <span><?= $block->escapeHtml($item->getFaqCategoryName()) ?></span>
+            <div class="faq-categories mb-6 <?= ($pageLayout == "1column")?'lg:w-full':'lg:w-1/4'; ?> <?= ($pageLayout == "1column")?'mb-6':'lg:pr-6'; ?>" 
+                 x-data="{ activeCategory: '<?= $block->escapeHtmlAttr($faqCatId) ?>' }">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4"><?= $block->escapeHtml(__("CATEGORIES")); ?></h3>
+                    <div class="space-y-2">
+                        <?php foreach ($items as $item) : ?>
+                            <button 
+                                class="w-full text-left px-4 py-2 rounded-md transition-colors duration-200"
+                                :class="activeCategory === '<?= $block->escapeHtmlAttr($item->getFaqCategoryId()) ?>' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+                                @click="loadFaqCategory('<?= $block->escapeHtmlAttr($item->getFaqCategoryId()) ?>')"
+                                x-on:click="activeCategory = '<?= $block->escapeHtmlAttr($item->getFaqCategoryId()) ?>'"
+                                id="cat-<?= $block->escapeHtmlAttr($item->getFaqCategoryId()) ?>">
+                                <?= $block->escapeHtml($item->getFaqCategoryName()) ?>
+                            </button>
+                        <?php endforeach; ?>
                     </div>
-                <?php
-                endforeach; ?>
+                </div>
             </div>
             <?php
         }
-    }  //end of isCategoryNavbarEnable() condition
+    }
     ?>
 
-<div class="risecommerce-question-answer <?= ($pageLayout == "1column" && $itemCount > 1 && $categoryNavbarEnable)?'column1layout':''; ?>">
+<div class="faq-content <?= ($pageLayout == "1column" && $itemCount > 1 && $categoryNavbarEnable)?'w-full':'lg:w-3/4'; ?>">
     <?php if ($itemCount != 0) {
         echo $this->getLayout()
             ->createBlock('Risecommerce\Faq\Block\Widget\Faq')
             ->setTemplate('Risecommerce_Faq::widget/faqcategory.phtml')->toHtml();
-} ?>
+    } ?>
 </div>
-<script type="text/javascript">
-    require(["jquery"], function ($) {
-        jQuery(document).ready(function () {
-            jQuery(".risecommerce-block-content").appendTo(".sidebar.sidebar-additional");
 
-            jQuery(".risecommerce-block-item").click(function () {
-                id = jQuery(this).attr('id');
-                url = "<?= $block->escapeUrl($block->getBaseUrl()) . 'faq/index/faqcategory/id/';?>" + id;
-                risecommerceLoadFaq(url);
-                jQuery(this).siblings().removeClass('active');
-                jQuery(this).addClass('active');
-            })
-
-            function risecommerceLoadFaq(url) {
-                var data = '';
-                jQuery.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: data,
-                    showLoader: true,
-                    success: function (data) {
-                        jQuery('.risecommerce-question-answer').html(data.output);
-                        return true;
-                    },
-                    error: function (data) {}
-                });
+<script>
+    function loadFaqCategory(categoryId) {
+        const url = "<?= $block->escapeUrl($block->getBaseUrl()) . 'faq/index/faqcategory/id/';?>" + categoryId;
+        
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
             }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.output) {
+                document.querySelector('.faq-content').innerHTML = data.output;
+                // Re-initialize Alpine.js components if needed
+                if (window.Alpine) {
+                    Alpine.initTree(document.querySelector('.faq-content'));
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading FAQ category:', error);
         });
-    });
+    }
 </script>
+
+<?php if ($categoryNavbarEnable && $itemCount > 1 && $pageLayout != "1column") : ?>
+<style>
+    .faq-categories {
+        float: left;
+    }
+    .faq-content {
+        float: right;
+    }
+    .faq-categories + .faq-content::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
 <?php endif; ?>
-<!-- This site has installed PayPal for WooCommerce v2.1.6 - https://www.angelleye.com/product/woocommerce-paypal-plugin/ -->
+
+<?php endif; ?>
+
