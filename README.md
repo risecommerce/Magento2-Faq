@@ -43,7 +43,7 @@ version - 2.3.x, 2.4.x
 ### Method II – Install via Composer
 
 ```
- composer require risecommerce/gento-2-faq-extension
+ composer require risecommerce/magento-2-faq-extension
 ```
 
 <h4>Enable Extension:</h4>
